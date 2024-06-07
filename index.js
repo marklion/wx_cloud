@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const { init: initDB, Counter } = require("./db");
-
 const logger = morgan("tiny");
 
 const app = express();
@@ -47,6 +46,11 @@ app.get("/api/wx_openid", async (req, res) => {
   if (req.headers["x-wx-source"]) {
     res.send(req.headers["x-wx-openid"]);
   }
+});
+
+app.post('/send_msg', async (req, res) => {
+  let resp = await axios.post('https://api.weixin.qq.com/cgi-bin/message/template/send', req.body);
+  res.send(resp.data);
 });
 
 const port = process.env.PORT || 80;
